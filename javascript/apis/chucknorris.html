@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body onload="setup()">
+    <h1>Chuck Norris (terrible) Jokes</h1>
+    <div>
+        <button onclick="getNextJoke()">Get New Joke</button> 
+        <button id="save_button" onclick="saveCurrentJoke()">Save Current Joke</button>
+    </div>
+    <div>
+        <h2 id="joke"></h2>
+    </div>
+    <div id="saved_jokes">
+
+    </div>
+    
+    <script>
+        var savedJokes = []
+
+        function setup() {
+            document.getElementById('save_button').disabled = true
+        }
+
+        function getNextJoke() {
+            fetch('https://api.chucknorris.io/jokes/random')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                let nextJoke = data['value']
+                document.getElementById('joke').innerText = nextJoke
+                document.getElementById('save_button').disabled = false
+            })
+        }
+
+        function saveCurrentJoke() {
+            let joke = document.getElementById('joke').innerText
+            savedJokes.push(joke)
+            let html = "<h2>SAVED JOKES</h2>"
+            html += "<ul>"
+            for(let i = 0; i < savedJokes.length; i++) {
+                html += "<li>" + savedJokes[i] + "</li>"
+            }
+            html += "</ul>" 
+            document.getElementById('saved_jokes').innerHTML = html
+        }
+    </script>
+</body>
+</html>
